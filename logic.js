@@ -25,23 +25,34 @@ const evalDisplay = document.querySelector('.eval');
 const operatorArr = [247, 215, 8722, 43]
 const numberArr = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '0']
 let secondNo = false;
+let haveToEval = false;
 
 function inputKey(e) {
     const inputVal = e.target.attributes.getNamedItem('data-key').value;
     console.log(e.target.innerText)
     console.log(inputVal.charCodeAt(0))
     console.log(typeof inputVal.charCodeAt(0));
-    // Clear button will wipe both input and output display
+    // Clear button will wipe input and output display whilst resetting original vals
     if (inputVal == "clear") {
         firstNoDisplay.innerText = "0";
         evalDisplay.innerText = "";
+        secondNo = false;
+        haveToEval = false;
     // Del button will remove one char from input display
     } else if (inputVal == "del") {
         firstNoDisplay.innerText = firstNoDisplay.innerText.slice(0, -1)
+    } else if (inputVal == "equals") {
+        if (haveToEval == true) {
+            
+        } 
     } else if (operatorArr.includes(inputVal.charCodeAt(0))) {
         // Base case
-        evalDisplay.innerText = firstNoDisplay.innerText + e.target.innerText;
-        secondNo = true;
+        if (haveToEval == false) {
+            evalDisplay.innerText = firstNoDisplay.innerText + e.target.innerText;
+            secondNo = true;
+        } else {
+
+        }
         // check to see if there is existing operator
         //console.log("hellpppp");
         //console.log(firstNoDisplay.innerText.length);
@@ -53,9 +64,13 @@ function inputKey(e) {
         //     }
     } else {
         // if no number has been inputted previously or second no. needs to be eval
-        if (firstNoDisplay.innerText == "0" || secondNo == true) {
+        if (firstNoDisplay.innerText == "0" && inputVal != ".") {
+            firstNoDisplay.innerText = inputVal;
+        } 
+        if (secondNo == true) {
             firstNoDisplay.innerText = inputVal;
             secondNo = false;
+            haveToEval = true;
         } else {
             firstNoDisplay.innerText += inputVal;
         }
