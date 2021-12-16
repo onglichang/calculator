@@ -16,7 +16,19 @@ function divide(a, b) {
 }
 
 function operate(operator, a, b) {
-    return operator(a, b);
+    switch(operator) {
+        case 247:
+            return divide(a, b);
+        case 215:
+            return multiply(a, b);
+        case 8722:
+            return subtract(a, b);
+        case 43:
+            return add(a, b);
+        default:
+            return "ERROR";
+
+    }
 }
 
 // Display function
@@ -29,9 +41,7 @@ let haveToEval = false;
 
 function inputKey(e) {
     const inputVal = e.target.attributes.getNamedItem('data-key').value;
-    console.log(e.target.innerText)
-    console.log(inputVal.charCodeAt(0))
-    console.log(typeof inputVal.charCodeAt(0));
+    
     // Clear button will wipe input and output display whilst resetting original vals
     if (inputVal == "clear") {
         firstNoDisplay.innerText = "0";
@@ -43,7 +53,14 @@ function inputKey(e) {
         firstNoDisplay.innerText = firstNoDisplay.innerText.slice(0, -1)
     } else if (inputVal == "equals") {
         if (haveToEval == true) {
-            
+            //console.log(evalDisplay.innerText.slice(-1).charCodeAt(0));
+            let operator = evalDisplay.innerText.slice(-1).charCodeAt(0);
+            let firstPart = evalDisplay.innerText.slice(0, -1);
+            let secondPart = firstNoDisplay.innerText;
+            //console.log(operator, firstPart, secondPart)
+            evalDisplay.innerText = firstPart + " " + String.fromCharCode(operator) +
+                                    " " + secondPart + " =";
+            firstNoDisplay.innerText = operate(operator, firstPart, secondPart);
         } 
     } else if (operatorArr.includes(inputVal.charCodeAt(0))) {
         // Base case
@@ -64,13 +81,18 @@ function inputKey(e) {
         //     }
     } else {
         // if no number has been inputted previously or second no. needs to be eval
-        if (firstNoDisplay.innerText == "0" && inputVal != ".") {
+        if (firstNoDisplay.innerText == "0" && inputVal != "." && secondNo == false) {
             firstNoDisplay.innerText = inputVal;
-        } 
-        if (secondNo == true) {
-            firstNoDisplay.innerText = inputVal;
-            secondNo = false;
-            haveToEval = true;
+        } else if (secondNo == true) {
+            if (inputVal == '.') {
+                firstNoDisplay.innerText = '0' + inputVal;
+                secondNo = false;
+                haveToEval = true;
+            } else {
+                firstNoDisplay.innerText = inputVal;
+                secondNo = false;
+                haveToEval = true;
+            }
         } else {
             firstNoDisplay.innerText += inputVal;
         }
