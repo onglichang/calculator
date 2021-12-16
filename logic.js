@@ -67,10 +67,13 @@ function inputKey(e) {
             // Reset conditional
             haveToEval = false;
             evaluated = true;
-        } 
+        }
     } else if (operatorArr.includes(inputVal.charCodeAt(0))) {
+        // Check for potential input of negative number
+        if (inputVal.charCodeAt(0) == 8722 && firstNoDisplay.innerText == 0) {
+            firstNoDisplay.innerText = "-";
         // Base case
-        if (haveToEval == false) {
+        } else if (haveToEval == false) {
             evalDisplay.innerText = firstNoDisplay.innerText + e.target.innerText;
             secondNo = true;
         } else {
