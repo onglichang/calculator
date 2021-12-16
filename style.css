@@ -49,6 +49,14 @@ body {
   gap: 4px;
 }
 
+.delete-btn {
+  background-color: #eab676;
+}
+
+.clear-btn {
+  background-color: #ea7676;
+}
+
 .clear-del,
 .row {
   display: flex;
