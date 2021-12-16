@@ -1,18 +1,18 @@
 // Basic math functions
 function add(a, b) {
-    return Number((a+b).toPrecision(5));
+    return Number((a+b).toFixed(5));
 }
 
 function subtract(a, b) {
-    return Number((a - b).toPrecision(5));
+    return Number((a - b).toFixed(5));
 }
 
 function multiply(a, b) {
-    return Number((a * b).toPrecision(5));
+    return Number((a * b).toFixed(5));
 }
 
 function divide(a, b) {
-    return Number((a / b).toPrecision(5));
+    return Number((a / b).toFixed(5));
 }
 
 function operate(operator, a, b) {
@@ -76,14 +76,12 @@ function inputKey(e) {
         } else if (haveToEval == false) {
             evalDisplay.innerText = firstNoDisplay.innerText + e.target.innerText;
             secondNo = true;
-        } else {
-
         }
     } else {
         console.log("first", secondNo);
         // if a pair of numbers have been evaluated and a number is inputted
         if (evaluated == true && numberArr.includes(inputVal) && secondNo == false) {
-            console.log("here", haveToEval);
+            console.log("here", secondNo, haveToEval, evaluated);
             firstNoDisplay.innerText = inputVal;
             evalDisplay.innerText = "";
             secondNo = false;
@@ -97,10 +95,12 @@ function inputKey(e) {
                 firstNoDisplay.innerText = '0' + inputVal;
                 secondNo = false;
                 haveToEval = true;
+                evaluated = false;
             } else {
                 firstNoDisplay.innerText = inputVal;
                 secondNo = false;
                 haveToEval = true;
+                evaluated = false;
             }
         } else {
             firstNoDisplay.innerText += inputVal;
