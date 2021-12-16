@@ -1,23 +1,24 @@
 // Basic math functions
 function add(a, b) {
-    return a + b;
+    return Number((a+b).toPrecision(5));
 }
 
 function subtract(a, b) {
-    return a - b;
+    return Number((a - b).toPrecision(5));
 }
 
 function multiply(a, b) {
-    return a * b;
+    return Number((a * b).toPrecision(5));
 }
 
 function divide(a, b) {
-    return a / b;
+    return Number((a / b).toPrecision(5));
 }
 
 function operate(operator, a, b) {
     switch(operator) {
         case 247:
+            // return Number(divide(a, b).toPrecision(5));
             return divide(a, b);
         case 215:
             return multiply(a, b);
@@ -38,6 +39,7 @@ const operatorArr = [247, 215, 8722, 43]
 const numberArr = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '0']
 let secondNo = false;
 let haveToEval = false;
+let evaluated = false;
 
 function inputKey(e) {
     const inputVal = e.target.attributes.getNamedItem('data-key').value;
@@ -48,19 +50,23 @@ function inputKey(e) {
         evalDisplay.innerText = "";
         secondNo = false;
         haveToEval = false;
+        evaluated = false;
     // Del button will remove one char from input display
     } else if (inputVal == "del") {
-        firstNoDisplay.innerText = firstNoDisplay.innerText.slice(0, -1)
+        firstNoDisplay.innerText = firstNoDisplay.innerText.slice(0, -1);
+    // Equals button will evaluate equation
     } else if (inputVal == "equals") {
         if (haveToEval == true) {
-            //console.log(evalDisplay.innerText.slice(-1).charCodeAt(0));
-            let operator = evalDisplay.innerText.slice(-1).charCodeAt(0);
-            let firstPart = evalDisplay.innerText.slice(0, -1);
-            let secondPart = firstNoDisplay.innerText;
-            //console.log(operator, firstPart, secondPart)
+            const operator = evalDisplay.innerText.slice(-1).charCodeAt(0);
+            const firstPart = evalDisplay.innerText.slice(0, -1);
+            const secondPart = firstNoDisplay.innerText;
+            // Display calculated values
             evalDisplay.innerText = firstPart + " " + String.fromCharCode(operator) +
                                     " " + secondPart + " =";
             firstNoDisplay.innerText = operate(operator, firstPart, secondPart);
+            // Reset conditional
+            haveToEval = false;
+            evaluated = true;
         } 
     } else if (operatorArr.includes(inputVal.charCodeAt(0))) {
         // Base case
@@ -70,18 +76,18 @@ function inputKey(e) {
         } else {
 
         }
-        // check to see if there is existing operator
-        //console.log("hellpppp");
-        //console.log(firstNoDisplay.innerText.length);
-        //console.log(firstNoDisplay.innerText[firstNoDisplay.innerText.length]);
-        
-        // if (!(numberArr.includes(firstNoDisplay.innerText.
-        //     charAt(firstNoDisplay.innerText.length - 1)))) {
-
-        //     }
     } else {
+        console.log("first", secondNo);
+        // if a pair of numbers have been evaluated and a number is inputted
+        if (evaluated == true && numberArr.includes(inputVal) && secondNo == false) {
+            console.log("here", haveToEval);
+            firstNoDisplay.innerText = inputVal;
+            evalDisplay.innerText = "";
+            secondNo = false;
+            haveToEval = false;
+            evaluated = false;
         // if no number has been inputted previously or second no. needs to be eval
-        if (firstNoDisplay.innerText == "0" && inputVal != "." && secondNo == false) {
+        } else if (firstNoDisplay.innerText == "0" && inputVal != "." && secondNo == false) {
             firstNoDisplay.innerText = inputVal;
         } else if (secondNo == true) {
             if (inputVal == '.') {
