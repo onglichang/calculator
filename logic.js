@@ -12,13 +12,15 @@ function multiply(a, b) {
 }
 
 function divide(a, b) {
+    if (b == 0) {
+        return alert("Think about it....");
+    }
     return Number((a / b).toFixed(5));
 }
 
 function operate(operator, a, b) {
     switch(operator) {
         case 247:
-            // return Number(divide(a, b).toPrecision(5));
             return divide(a, b);
         case 215:
             return multiply(a, b);
@@ -53,20 +55,28 @@ function inputKey(e) {
         evaluated = false;
     // Del button will remove one char from input display
     } else if (inputVal == "del") {
-        firstNoDisplay.innerText = firstNoDisplay.innerText.slice(0, -1);
+        if (firstNoDisplay.innerText.length == 1) {
+            firstNoDisplay.innerText = "0";
+        } else {
+            firstNoDisplay.innerText = firstNoDisplay.innerText.slice(0, -1);
+        } 
     // Equals button will evaluate equation
     } else if (inputVal == "equals") {
         if (haveToEval == true) {
             const operator = evalDisplay.innerText.slice(-1).charCodeAt(0);
             const firstPart = evalDisplay.innerText.slice(0, -1);
             const secondPart = firstNoDisplay.innerText;
-            // Display calculated values
-            evalDisplay.innerText = firstPart + " " + String.fromCharCode(operator) +
-                                    " " + secondPart + " =";
-            firstNoDisplay.innerText = operate(operator, firstPart, secondPart);
-            // Reset conditional
-            haveToEval = false;
-            evaluated = true;
+            const evaluatedAns = operate(operator, firstPart, secondPart);
+            // Account for division by 0
+            if (evaluatedAns != undefined) {
+                // Display calculated values
+                evalDisplay.innerText = firstPart + " " + String.fromCharCode(operator) +
+                                        " " + secondPart + " =";
+                firstNoDisplay.innerText = evaluatedAns;
+                // Reset conditional
+                haveToEval = false;
+                evaluated = true;
+            }
         }
     } else if (operatorArr.includes(inputVal.charCodeAt(0))) {
         // Check for potential input of negative number
@@ -78,10 +88,11 @@ function inputKey(e) {
             secondNo = true;
         }
     } else {
-        console.log("first", secondNo);
+        // Do not permit more than 1 "." to be added to number
+        if (firstNoDisplay.innerText.includes(".") && inputVal == ".") {
+            alert("Please do not use multiple floating points");
         // if a pair of numbers have been evaluated and a number is inputted
-        if (evaluated == true && numberArr.includes(inputVal) && secondNo == false) {
-            console.log("here", secondNo, haveToEval, evaluated);
+        } else if (evaluated == true && numberArr.includes(inputVal) && secondNo == false) {
             firstNoDisplay.innerText = inputVal;
             evalDisplay.innerText = "";
             secondNo = false;
